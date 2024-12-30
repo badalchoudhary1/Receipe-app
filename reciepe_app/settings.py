@@ -130,3 +130,18 @@ MEDIA_URL="/media/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Authentication backends (default is fine)
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# Messages framework for displaying messages
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+# Redirect URL after login
+LOGIN_REDIRECT_URL = 'profile'
+
+# URL for login required redirection
+LOGIN_URL = 'login'

@@ -1,0 +1,19 @@
+{% extends "vege_base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-secondary text-white text-center">
+                    <h2>Welcome, {{ user.username }}!</h2>
+                </div>
+                <div class="card-body text-center">
+                    <p>This is your profile page. Only logged-in users can access this page.</p>
+                    <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

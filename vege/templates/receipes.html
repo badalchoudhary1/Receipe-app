@@ -2,70 +2,57 @@
 
 {% block content %}
     <div class="container mt-5">
-        <form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h2>Add Recipe</h2>
-            <hr>
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Recipe Name</label>
-                <input name="receipe_name" type="text" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Recipe Description</label>
-                <textarea class="form-control" name="receipe_description" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Recipe Image</label>
-                <input name="receipe_image" type="file" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Add Recipe</button>
-        </form>
-
-        <div class="mt-5">
-          <div class="mx-auto col-6">
-            <form>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Search foods</label>
-              <input name="search" type="text" class="form-control">
-          </div>
-          <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-          </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="fw-bold">All Recipes</h2>
+            <a href="{% url 'add_recipe' %}" class="btn btn-success">Add New Recipe</a>
         </div>
 
-        <h2 class="mt-5">All Recipes</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Recipe Name</th>
-                    <th scope="col">Recipe Description</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for receipe in receipes %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ receipe.receipe_name }}</td>
-                    <td>{{ receipe.receipe_description }}</td>
-                    <td>
-                        <img src="{{ receipe.receipe_image.url }}" alt="Recipe Image" style="height: 100px;">
-                    </td>
-                    <td>
-                        <a href="{% url 'delete_receipe' receipe.id %}" class="btn btn-danger">Delete</a>
-                    </td>
-                    <td>
-                      <a href="{% url 'update_receipe' receipe.id %}" class="btn btn-success">Update</a>
-                  </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5">No recipes available</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Search form -->
+        <div class="mx-auto col-8 mt-4">
+            <form method="GET" class="input-group">
+                <input name="search" type="text" class="form-control" placeholder="Search Foods">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <hr>
+
+        <!-- Recipes table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered mt-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="text-center">#</th>
+                        <th scope="col">Recipe Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" class="text-center">Image</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for receipe in receipes %}
+                        <tr>
+                            <th scope="row" class="text-center align-middle">{{ forloop.counter }}</th>
+                            <td class="align-middle">{{ receipe.receipe_name }}</td>
+                            <td class="align-middle">{{ receipe.receipe_description }}</td>
+                            <td class="text-center align-middle">
+                                <img src="{{ receipe.receipe_image.url }}" alt="Recipe Image" class="img-thumbnail" style="height: 100px;">
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="btn-group" role="group">
+                                    <a href="{% url 'update_receipe' receipe.id %}" class="btn btn-warning btn-sm me-2">Update</a>
+
+                                    <a href="{% url 'delete_receipe' receipe.id %}" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">No recipes available</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}

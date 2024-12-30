@@ -1,0 +1,26 @@
+{% extends "vege_base.html" %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <form class="col-6 card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h2 class="text-center">Add Recipe</h2>
+            <hr>
+            <div class="mb-3">
+                <label for="receipe_name" class="form-label">Recipe Name</label>
+                <input name="receipe_name" type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="receipe_description" class="form-label">Recipe Description</label>
+                <textarea class="form-control" name="receipe_description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="receipe_image" class="form-label">Recipe Image</label>
+                <input name="receipe_image" type="file" class="form-control">
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Add Recipe</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

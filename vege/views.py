@@ -1,9 +1,66 @@
-from django.shortcuts import render,redirect
-from .models import *
-from django.urls import reverse
-# Create your views here.
+from django.shortcuts import render, redirect
+from .models import Reciepe
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
+# User Registration view
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Registration successful. Please log in.')
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+# Login view
+def login_view(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, 'You are now logged in.')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Invalid login credentials.')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'registration/login.html', {'form': form})
+
+# Logout view
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('login')
+
+# Profile view - protected with login_required
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
+
+
+
+# View for displaying all recipes and the search functionality
+@login_required
 def receipes(request):
+    queryset = Reciepe.objects.all()
+
+    # Search functionality
+    if request.GET.get('search'):
+        queryset = queryset.filter(receipe_name__icontains=request.GET.get('search'))
+
+    context = {'receipes': queryset}
+    return render(request, "receipes.html", context)
+
+# View for adding a new recipe
+@login_required
+def add_recipe(request):
     if request.method == "POST":
         data = request.POST
         receipe_image = request.FILES.get("receipe_image")
@@ -12,51 +69,37 @@ def receipes(request):
 
         # Create new recipe
         Reciepe.objects.create(receipe_name=receipe_name, receipe_description=receipe_description, receipe_image=receipe_image)
-        
-        # Redirect using the URL name
-        return redirect('receipes')  # This will match the URL pattern name
+        return redirect('receipes')  # Redirect to the recipes page after adding the recipe
 
-    queryset = Reciepe.objects.all()
-     
-    if request.GET.get('search'):
-        print(request.GET.get('search'))
-        queryset=queryset.filter(receipe_name__icontains=request.GET.get('search'))
-        
+    return render(request, "add_recipe.html")
 
-
-    context = {'receipes': queryset}
-
-    return render(request, "receipes.html", context)
-
-
-
+# View for deleting a recipe
+@login_required
 def delete_receipe(request, id):
-    # Get the recipe object and delete it
     receipe = Reciepe.objects.get(id=id)
     receipe.delete()
-    
-    # Redirect to receipes page after deletion
     return redirect('receipes')
 
-def update_receipe(request,id):
-    queryset=Reciepe.objects.get(id=id)
+# View for updating a recipe
+@login_required
+def update_receipe(request, id):
+    receipe = Reciepe.objects.get(id=id)
 
-    if request.method =="POST":
-        data=request.POST
+    if request.method == "POST":
+        data = request.POST
         receipe_image = request.FILES.get("receipe_image")
         receipe_name = data.get('receipe_name')
         receipe_description = data.get('receipe_description')
 
-        queryset.receipe_name=receipe_name
-        queryset.receipe_description=receipe_description
+        receipe.receipe_name = receipe_name
+        receipe.receipe_description = receipe_description
 
         if receipe_image:
-            queryset.receipe_image=receipe_image
+            receipe.receipe_image = receipe_image
 
-        queryset.save()
-
+        receipe.save()
         return redirect('receipes')
-         
-    context={'receipe':queryset}
 
-    return render(request,'update_receipes.html',context)
+    context = {'receipe': receipe}
+    return render(request, "update_receipe.html", context)
+
