@@ -37,9 +37,9 @@
         <div class="container mt-5 content">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <div class="card">
+                    <div class="card shadow-sm">
                         <div class="card-header text-center bg-secondary text-white">
-                            <h3>Register</h3>
+                            <h3>Welcome to RecipeApp</h3>
                         </div>
                         <div class="card-body">
                             <form method="post">
@@ -50,8 +50,7 @@
                                     <div class="mb-3">
                                         <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
                                         {{ field }}
-                                        <!-- Only display errors after form submission -->
-                                        <div class="text-danger" style="display: none;" id="error-{{ field.id_for_label }}">
+                                        <div class="text-danger" id="error-{{ field.id_for_label }}">
                                             {% if field.errors %}
                                                 {% for error in field.errors %}
                                                     <p>{{ error }}</p>
@@ -66,7 +65,9 @@
                                 </div>
                             </form>
                             <div class="text-center mt-3">
-                                <p>Already have an account? <a href="{% url 'login' %}" class="text-secondary">Login here</a></p>
+                                <p>Already have an account? 
+                                    <a href="{% url 'login' %}" class="text-secondary fw-bold">Login here</a>
+                                </p>
                             </div>
                         </div>
                     </div>
