@@ -149,12 +149,12 @@ LOGIN_REDIRECT_URL = 'profile'
 LOGIN_URL = 'login'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is necessary
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This is necessary
 
 # Ensure static files load from here
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Adjust if your static files are in another folder
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),  # Adjust if your static files are in another folder
+# ]
 
 # Media files (Uploaded images, etc.)
 MEDIA_URL = '/media/'
