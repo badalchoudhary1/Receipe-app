@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: receipe-app
+    runtime: python
+    buildCommand: "./manage.py collectstatic --noinput"
+    startCommand: "gunicorn reciepe_app.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: reciepe_app.settings
+      - key: PYTHON_VERSION
+        value: 3.12
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DISABLE_COLLECTSTATIC
+        value: 1
